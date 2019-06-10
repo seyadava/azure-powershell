@@ -1,29 +1,28 @@
-# Network
-## Running Tests
-There is a [Jenkins job](https://azuresdkci.westus2.cloudapp.azure.com/view/PowerShell/job/ps-network-test/) available for running Network Scenario tests. To run, use the [Build with Parameters](https://azuresdkci.westus2.cloudapp.azure.com/view/PowerShell/job/ps-network-test/build) button and enter the appropriate information. You can change the `fork` and `branch` for the [azure-powershell](https://github.com/Azure/azure-powershell) GitHub repo. Additionally, you can use your own service principal and subscription by entering the `clientID`, `clientSecret`, `tenantId`, and `subId`. The default values use our test subscription and service principal for running tests.
+## Generation Requirements
+Use of the beta version of `autorest.powershell` generator requires the following:
+- [NodeJS LTS](https://nodejs.org) (10.15.x LTS preferred)
+  - **Note**: It *will not work* with Node < 10.x. Using 11.x builds may cause issues as they may introduce instability or breaking changes.
+> If you want an easy way to install and update Node, [NVS - Node Version Switcher](../nodejs/installing-via-nvs.md) or [NVM - Node Version Manager](../nodejs/installing-via-nvm.md) is recommended.
+- [AutoRest](https://aka.ms/autorest) v3 beta <br>`npm install -g autorest@beta`<br>&nbsp;
+- PowerShell 6.0 or greater
+  - If you don't have it installed, you can use the cross-platform npm package <br>`npm install -g pwsh`<br>&nbsp;
+- .NET Core SDK 2.0 or greater
+  - If you don't have it installed, you can use the cross-platform npm package <br>`npm install -g dotnet-sdk-2.2`<br>&nbsp;
 
-The test results are created as build artifacts in the Jenkins job. The `NetworkTests.htm` is the xUnit tests results log. The artifacts also contain a folder, `src/Network/Network.Test/bin/Debug/SessionRecords`. This folder has subfolders for all the session records created when running the tests. 
+## Run Generation
+In this directory, run AutoRest:
+> `autorest`
 
-**Note:** A session records are created for all tests, despite if they pass or fail. Make sure to only use session records from passing tests if you use these files to update the stored records in the repo.
+---
+### AutoRest Configuration
+> see https://aka.ms/autorest
 
-## Feature Registration
-Some tests may fail if you do not have the appropriate features enabled on your subscription. If the test requires a certain feature, here is an example how to register for a feature.
-```powershell
-# If your subscription is not registered with the provider...
-Register-AzureRmResourceProvider -ProviderNamespace Microsoft.Network
-# Register the feature
-Register-AzureRmProviderFeature -FeatureName AllowApplicationSecurityGroups -ProviderNamespace Microsoft.Network
-# Check registration
-Get-AzureRmProviderFeature -FeatureName AllowApplicationSecurityGroups -ProviderNamespace Microsoft.Network
-```
+``` yaml
+require:
+  - $(this-folder)/../readme.azurestack.md
+  - $(repo)/specification/azsadmin/resource-manager/network/readme.azsautogen.md
+  - $(repo)/specification/azsadmin/resource-manager/network/readme.md
 
-### ApplicationSecurityGroupTests
-Register the feature `AllowApplicationSecurityGroups` for `Microsoft.Network` to your subscription.
 
-### LoadBalancerTests
-Register the feature `AllowILBAllPortsRule` for `Microsoft.Network` to your subscription.  
-Register for the [Load Balancer Standard Preview](https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-standard-overview#sign-up-by-using-powershell) on your subscription.
-
-### PublicIpAddressTests
-[Enable Availability Zones](https://ms.portal.azure.com/#blade/Microsoft_Azure_Compute/EnableAvailabilityZonesBlade) for your subscription.  
-Register for the [Standard SKU Preview](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-public-ip-address#register-for-the-standard-sku-preview) on your subscription.
+subject-prefix: ''
+module-version: 0.0.1
