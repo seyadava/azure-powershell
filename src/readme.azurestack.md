@@ -4,7 +4,7 @@
 ``` yaml
 azure: true
 powershell: true
-branch: networkspecgen
+branch: users/seyadava/networkspecgen
 repo: https://github.com/seyadava/azure-rest-api-specs/blob/$(branch)
 ```
 
