@@ -19,7 +19,7 @@ In this directory, run AutoRest:
 
 ``` yaml
 require:
-  - $(this-folder)/../readme.azurestack.md
+  - $(this-folder)/../../readme.azurestack.md
   - $(repo)/specification/azsadmin/resource-manager/compute/readme.azsautogen.md
   - $(repo)/specification/azsadmin/resource-manager/compute/readme.md
 
